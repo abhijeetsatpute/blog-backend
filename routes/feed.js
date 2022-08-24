@@ -22,4 +22,7 @@ router.post(
     feedController.createPost
 );
 
+// GET single post
+router.get('/post/:postId', feedController.getPost);
+
 module.exports = router;
