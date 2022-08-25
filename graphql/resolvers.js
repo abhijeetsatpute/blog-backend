@@ -18,6 +18,7 @@ module.exports = {
     }
     if (errors.length > 0) {
       const error = new Error('Invalid input.');
+      // Handling errors in graphql
       error.data = errors;
       error.code = 422;
       throw error;
