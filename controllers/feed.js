@@ -192,3 +192,46 @@ const clearImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));
 };
+
+exports.getStatus = (req, res, next) => {
+  const userId = req.userId;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Could not find Status.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Status fetched.", status: user.status });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.setStatus = (req, res, next) => {
+  const userId = req.userId;
+  const status = req.body.status;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Could not find Status.");
+        error.statusCode = 404;
+        throw error;
+      }
+      user.status = status;
+      return user.save()
+    })
+    .then(result => {
+      res.status(200).json({ message: "Status Updated.", status: status });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
