@@ -7,6 +7,7 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const {graphqlHTTP } = require('express-graphql');
 
+
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 const auth = require('./middleware/auth');
@@ -35,6 +36,8 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+app.use(auth);
+
 // app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
 app.use(
@@ -55,7 +58,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(auth);
+
 
 app.put('/post-image', (req, res, next) => {
   if (!req.isAuth) {
